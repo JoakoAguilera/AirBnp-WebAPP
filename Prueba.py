@@ -14,8 +14,11 @@ st.set_page_config(
 st.title("Los Angeles")
 df = pd.read_csv('listings.csv')
 
-# Slider segun el precio de cada tipo de hospedaje
-values = st.slider('Select a range of values', 0.0, 25000.0, (6250.0, 18750.0)) 
+# Slider segun la cantidad de reviews de cada tipo de hospedaje
+valor_min = float(df["price"].min())
+valor_max = float(df["price"].max())
+
+values = st.slider('Select a range of values', valor_min, valor_max, ((valor_max / 4) , (valor_max * 0.75))) 
 # modificar parametros con una lista
 st.write('Values:', values)
 
