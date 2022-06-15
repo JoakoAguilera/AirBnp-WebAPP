@@ -22,4 +22,4 @@ values = st.slider('Select a range of values', valor_min, valor_max, ((valor_max
 st.write('Values:', values)
 
 # Mapa
-st.map(df[(df["price"] < values[1]) & (df["price"] > values[0])])
+st.map(df[(df["price"] < values[1]) & (df["price"] >= values[0])])
