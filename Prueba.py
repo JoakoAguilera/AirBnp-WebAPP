@@ -17,9 +17,29 @@ df = pd.read_csv('listings.csv')
 valor_min = float(df["price"].min())
 valor_max = float(df["price"].max())
 
-values = st.slider('Select a range of values', valor_min, valor_max, ((valor_max / 4) , (valor_max * 0.75))) 
+
+
+
+# Barrio
+option = st.selectbox(
+     'Selecciona un barrio:',
+     sorted(list(set(list(df['neighbourhood'])))))
+
+# Tipo de hospedaje
+option1 = st.multiselect(
+     'What are your favorite colors',
+     sorted(list(set(list(df['room_type'])))),
+     ["Entire home/apt"])
+
+values = st.slider('Elige un rango de precio', valor_min, valor_max, ((valor_max / 4) , (valor_max * 0.75))) 
 # modificar parametros con una lista
 st.write('Values:', values)
 
+
+
 # Mapa
-st.map(df[(df["price"] < values[1]) & (df["price"] >= values[0])])
+st.map(
+     df[((df["neighbourhood"] == option) 
+     & (df["room_type"] == option1[0])
+     & (df["price"] >= values[0]) 
+     & (df["price"] <= values[1]))])

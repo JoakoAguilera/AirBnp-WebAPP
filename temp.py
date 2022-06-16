@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
+df = pd.read_csv('listings.csv')
 
-st.title('AirBnB, "Los Angeles"')
-
-st.slider('Segun su puntuacion', 1, 5, (2, 3))
-
-#
+st.selectbox(
+     'Selecciona un barrio:',
+     sorted(list(set(list(df['neighbourhood'])))))
