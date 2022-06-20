@@ -27,7 +27,7 @@ option = st.selectbox(
 
 # Tipo de hospedaje
 option1 = st.multiselect(
-     'What are your favorite colors',
+     'Selecciona tipo de hospedaje',
      sorted(list(set(list(df['room_type'])))),
      ["Entire home/apt"])
 
