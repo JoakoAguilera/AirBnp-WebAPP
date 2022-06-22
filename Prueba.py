@@ -63,5 +63,7 @@ ax.set_xticklabels(labels)
 st.pyplot(fig)
 
 
-
+#Grafico de torta
 https://matplotlib.org/stable/plot_types/stats/pie.html#sphx-glr-plot-types-stats-pie-py
+#Grafico de barra
+https://matplotlib.org/stable/plot_types/basic/bar.html
