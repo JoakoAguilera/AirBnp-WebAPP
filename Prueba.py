@@ -64,4 +64,4 @@ st.pyplot(fig)
 
 
 
-
+https://matplotlib.org/stable/plot_types/stats/pie.html#sphx-glr-plot-types-stats-pie-py
