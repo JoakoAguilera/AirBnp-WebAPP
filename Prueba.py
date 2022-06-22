@@ -4,10 +4,10 @@ import pandas as pd
 
 # Config de la pagina 
 st.set_page_config(
-     page_title = "AirBnB (L.A)",
-     page_icon = "🌎",
-     layout = "wide",
-     initial_sidebar_state = "auto",) 
+     page_title="AirBnB (L.A)",
+     page_icon="🌎",
+     layout="wide",
+     initial_sidebar_state="auto")
 
 # Título
 st.title("Los Angeles")
