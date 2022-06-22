@@ -5,5 +5,5 @@ filename = 'listings.csv'
 df = pd.read_csv(filename, header=0)
 df_precios = df[['price']]
 
-print(df_precios.max())
+print(df_precios.describe())
 
