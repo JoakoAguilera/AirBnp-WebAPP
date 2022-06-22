@@ -48,3 +48,20 @@ st.map(
      & (df["price"] >= values[0]) 
      & (df["price"] <= values[1])
      & (df["number_of_reviews"] >= reviews))])
+
+
+import matplotlib.pyplot as plt
+ 
+arr = np.random.normal(1, 1, size=40)
+fig, ax = plt.subplots()
+ax.hist(arr, bins=3)
+plt.axis ([0,6,0,20])
+plt.rcParams["figure.figsize"]=(20,3)
+labels= [list(df ["room_type"]).count("Hotel room"),list(df ["room_type"]).count("Private room"),list(df ["room_type"]).count("Shared room")]
+ax.set_xticklabels(labels)
+
+st.pyplot(fig)
+
+
+
+
