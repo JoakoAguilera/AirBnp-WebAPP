@@ -35,10 +35,11 @@ precios = st.sidebar.slider('Elige un rango de precio',
                             step)
 
 # Slider para seleccionar un minimo de reviews
-#reviews = st.sidebar.slider('Seleccione un minimo de reviews', 0, reviews_max = int(df["number_of_reviews"].max()), default_reviews=0)
+reviews_max = int(df["number_of_reviews"].max())
+reviews = st.sidebar.slider('Seleccione un minimo de reviews', 0, reviews_max)
 
 # df filtrado
-df_filter=df.query("neighbourhood == @barrio & room_type == @hospedaje & price >= @precios[0] & price <= @precios[1]")
+df_filter=df.query("neighbourhood == @barrio & room_type == @hospedaje & price >= @precios[0] & price <= @precios[1] & number_of_reviews >= @reviews")
 
 # --- Página ---
 # Título
