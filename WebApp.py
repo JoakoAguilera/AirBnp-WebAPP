@@ -64,17 +64,7 @@ d = {"Type_room": ["Entire home/apt", "Private room", "Shared room", "Hotel room
      "Total": [df_barrio_lista.count("Entire home/apt"), df_barrio_lista.count("erivate room"),
                 df_barrio_lista.count("Shared room"), df_barrio_lista.count("Hotel room")]}
 
-df_torta=pd.DataFrame(data=d)
-
-torta = mp.pie(df_torta, 
-               "Porcentaje por hospedaje",
-               values="Total",
-               names="Type_room")
-
-st.pyplot_chart(torta)
-
 # Grafico de torta
-
 df = pd.read_csv("listings.csv")
 st.write(df)
 hospedaje = [list (df ["room_type"]).count("Hotel room"),
