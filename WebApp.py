@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as mp
+import matplotlib.pyplot as plt 
 
 # Archivo a trabajar
 df = pd.read_csv('listings.csv')
@@ -71,3 +72,21 @@ torta = mp.pie(df_torta,
                names="Type_room")
 
 st.pyplot_chart(torta)
+
+# Grafico de torta
+
+df = pd.read_csv("listings.csv")
+st.write(df)
+hospedaje = [list (df ["room_type"]).count("Hotel room"),
+             list(df["room_type"]).count("Private room"),
+             list(df["room_type"]).count("Shared room"),
+             list (df ["room_type"]).count("Entire home/apt")]
+            
+st.write (hospedaje)             
+nombres = ["Hotel room","Private room","Shared room","Entire home/apt"]
+st.write (nombres)
+
+grafico,porciones = plt.subplots()
+porciones.pie(hospedaje,labels=nombres,autopct="%0.1f %%")
+porciones.axis("equal")
+st.pyplot(grafico)
