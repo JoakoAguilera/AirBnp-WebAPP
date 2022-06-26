@@ -1,0 +1,152 @@
+import streamlit as st
+import pandas as pd
+import plotly.express as mp
+
+# Archivo a trabajar
+df = pd.read_csv('listings.csv')
+
+# Config de la pagina
+st.set_page_config(page_title="AirBnB (L.A)",
+                   page_icon="🌎",
+                   layout="wide")
+
+# ---- Side-Bar ----
+st.sidebar.header("Modifica los filtros:")
+
+# Selectbox para barrios
+barrio = st.sidebar.selectbox('Selecciona un barrio:', sorted((df["neighbourhood"]).unique().tolist()))
+
+# multiselect para el tipo de hospedaje
+default_room=["Entire home/apt"]
+hospedaje = st.sidebar.multiselect(
+    "Selecciona el tipo de hospedaje",
+    df['room_type'].unique(),
+    default_room)
+
+
+# Slider para determinar el maximo y minimo de precios
+valor_min = int(df["price"].min())
+valor_max = int(df["price"].max())
+step=200
+precios = st.sidebar.slider('Elige un rango de precio',
+                            valor_min,
+                            valor_max,
+                            (valor_min, valor_max),
+                            step)
+
+# Slider para seleccionar un minimo de reviews
+#reviews = st.sidebar.slider('Seleccione un minimo de reviews', 0, reviews_max = int(df["number_of_reviews"].max()), default_reviews=0)
+
+# df filtrado
+df_filter=df.query("neighbourhood == @barrio & room_type == @hospedaje & price >= @precios[0] & price <= @precios[1]")
+
+# --- Página ---
+# Título
+st.title("AirBnb datos sobre Los Angeles")
+#st.subheader(barrio)
+st.markdown(barrio)
+
+st.map(df_filter)
+muestra=df_filter.loc[:,["name","neighbourhood","room_type","price","number_of_reviews"]]
+st.dataframe(muestra)
+
+df_barrio=df.query("neighbourhood == @barrio")
+df_barrio_lista= df_barrio["room_type"].tolist()
+Entire_home_apt=["Entire home/apt", df_barrio_lista.count("Entire home/apt")]
+Private_room= ["Private room", df_barrio_lista.count("Private room")]
+Shared_room=["Shared room",  df_barrio_lista.count("Shared room")]
+Hotel_room=["Hotel room", df_barrio_lista.count("Hotel room")]
+
+list_room=[Entire_home_apt, Private_room, Shared_room, Hotel_room]
+d = {"Type_room": ["Entire home/apt", "Private room", "Shared room", "Hotel room"],
+     "Total": [df_barrio_lista.count("Entire home/apt"), df_barrio_lista.count("erivate room"),
+                df_barrio_lista.count("Shared room"), df_barrio_lista.count("Hotel room")]}
+
+
+# GRAFICO DE TORTA
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("listings.csv")
+#st.write(df)
+hospedaje = [list (df ["room_type"]).count("Hotel room"),
+             list(df["room_type"]).count("Private room"),
+             list(df["room_type"]).count("Shared room"),
+             list (df ["room_type"]).count("Entire home/apt")]
+           
+#st.write (hospedaje)            
+nombres = ["Hotel room","Private room","Shared room","Entire home/apt"]
+#st.write (nombres)
+
+grafico,porciones = plt.subplots()
+porciones.pie(hospedaje,labels=nombres,autopct="%0.1f %%")
+porciones.axis("equal")
+st.pyplot(grafico)
+
+
+# GRAFICO DE BARRA
+import numpy as np
+
+#arr = np.random.normal(1, 1, size=100)
+#fig, ax = plt.subplots()
+#ax.hist(arr, bins=20)
+
+#st.pyplot(fig)
+
+#etiquetas = ["Hotel room", "Private room", "Shared room", "Entire room"]
+#hospedaje = ["Hotel room", "Private room", "Shared room", "Entire room"] #Cambiar a promedio
+#promedio = [list(df["room_type"])]
+
+
+#co = np.arange (len(hospedaje))
+#an = 0.30
+
+#fig, ax = plt.subplots()
+#ax.bar = (co,valores,an)
+#ax.set_title("Promedio de precio por noche")
+#ax.set_ylabel("Promedio precio")
+#ax.set_xlabel("Hospedajes")
+
+#sum/(lista)/len(lista)
+
+
+columnaprecio1 = df.query ("room_type == \"Hotel room\"")
+columnaprecio2 = df.query ("room_type == \"Private room\"")
+columnaprecio3 = df.query ("room_type == \"Shared room\"")
+columnaprecio4 = df.query ("room_type == \"Entire room/apt\"")
+
+valor1 = int(columnaprecio1["price"].mean())
+valor2 = int(columnaprecio2["price"].mean())
+valor3 = int(columnaprecio3["price"].mean())
+valor4 = int(columnaprecio4["price"].mean())
+
+
+promedio = [valor1,
+            valor2,
+            valor3,
+            valor4]
+
+
+## Declaramos valores para el eje x
+#eje_x = df["room_type"].unique().tolist()
+eje_x =["Hotel room", "Private room", "Shared room", "Entire room"]
+ 
+## Declaramos valores para el eje y
+eje_y = promedio
+ 
+## Creamos Gráfica
+#plt.bar(eje_x, eje_y)
+ 
+## Legenda en el eje y
+#st.ylabel('promedio de precio')
+ 
+## Legenda en el eje x
+#st.xlabel('Tipo de hospedaje')
+ 
+## Título de Gráfica
+st.title('Promedio precio de noche segun tipo de hospedaje') 
+
+arr = np.random.normal(1, 1, size=80)
+fig, ax = plt.subplots()
+ax.hist(arr, bins=4)
+
+st.pyplot(fig)
