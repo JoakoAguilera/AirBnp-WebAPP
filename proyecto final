@@ -17,7 +17,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 
 # Archivo a trabajar
-df = pd.read_csv('listings.csv')
+df = pd.read_csv('LosAngeles.csv')
 
 # Configuracion de la pagina 
 st.set_page_config("AirBnB (L.A)",
