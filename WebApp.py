@@ -14,7 +14,7 @@ st.set_page_config("AirBnB (L.A)",
 # ---- Side-Bar ----
 st.sidebar.header("Modifica los filtros:")
 
-# Selectboc para barrios
+# Selectbox para barrios
 barrio = st.sidebar.selectbox('Selecciona un barrio:', sorted((df["neighbourhood"]).unique().tolist()))
 
 # multiselect para el tipo de hospedaje
@@ -56,13 +56,13 @@ df_barra = pd.DataFrame()
 x = ["Hotel room", "Entire home/apt", "Private room", "Shared room"]
 df_barra["Tipo de hospedaje"] = x
 
-df_hotel_room = df_filter.query("room_type == \"Hotel room\"")
+df_hotel_room = df.query("room_type == \"Hotel room\"")
 valor1 = df_hotel_room["price"].mean()
-df_entire_home = df_filter.query("room_type == \"Entire home/apt\"")
+df_entire_home = df.query("room_type == \"Entire home/apt\"")
 valor2 = df_entire_home["price"].mean()
-df_Private_room = df_filter.query("room_type == \"Private room\"")
+df_Private_room = df.query("room_type == \"Private room\"")
 valor3 = df_Private_room["price"].mean()
-df_Shared_room = df_filter.query("room_type == \"Shared room\"")
+df_Shared_room = df.query("room_type == \"Shared room\"")
 valor4 = df_Shared_room["price"].mean()
 
 y = [valor1, valor2, valor3, valor4]
