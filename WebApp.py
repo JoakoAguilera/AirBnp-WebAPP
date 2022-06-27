@@ -1,15 +1,15 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as mp
-import matplotlib.pyplot as plt 
+import plotly.express as px
 
 # Archivo a trabajar
 df = pd.read_csv('listings.csv')
 
 # Config de la pagina 
-st.set_page_config(page_title="AirBnB (L.A)",
-                   page_icon="🌎",
-                   layout="wide")
+st.set_page_config("AirBnB (L.A)",
+                   "🌎",
+                   "wide",
+                   "collapsed")
 
 # ---- Side-Bar ----
 st.sidebar.header("Modifica los filtros:")
@@ -28,7 +28,7 @@ hospedaje = st.sidebar.multiselect(
 # Slider para determinar el maximo y minimo de precios
 valor_min = int(df["price"].min())
 valor_max = int(df["price"].max())
-step=200
+step = 200
 precios = st.sidebar.slider('Elige un rango de precio', 
                             valor_min, 
                             valor_max, 
@@ -36,8 +36,8 @@ precios = st.sidebar.slider('Elige un rango de precio',
                             step)
 
 # Slider para seleccionar un minimo de reviews
-reviews_max = int(df["number_of_reviews"].max())
-reviews = st.sidebar.slider('Seleccione un minimo de reviews', 0, reviews_max)
+step2 = 5
+reviews = st.sidebar.slider('Seleccione un mínimo de reviews', 0, 200 , 0, step2)
 
 # df filtrado
 df_filter=df.query("neighbourhood == @barrio & room_type == @hospedaje & price >= @precios[0] & price <= @precios[1] & number_of_reviews >= @reviews")
@@ -46,37 +46,52 @@ df_filter=df.query("neighbourhood == @barrio & room_type == @hospedaje & price >
 # Título
 st.title("AirBnb datos sobre Los Angeles")
 #st.subheader(barrio)
-st.markdown(barrio)
+st.markdown(f"Se muestran {len(df_filter)} resultados en el mapa")
 
 st.map(df_filter)
 muestra=df_filter.loc[:,["name","neighbourhood","room_type","price","number_of_reviews"]]
 st.dataframe(muestra)
+# --- Grafico de barras ---
+df_barra = pd.DataFrame()
+x = ["Hotel room", "Entire home/apt", "Private room", "Shared room"]
+df_barra["Tipo de hospedaje"] = x
 
-df_barrio=df.query("neighbourhood == @barrio")
-df_barrio_lista= df_barrio["room_type"].tolist()
-Entire_home_apt=["Entire home/apt", df_barrio_lista.count("Entire home/apt")]
-Private_room= ["Private room", df_barrio_lista.count("erivate room")]
-Shared_room=["Shared room",  df_barrio_lista.count("Shared room")]
-Hotel_room=["Hotel room", df_barrio_lista.count("Hotel room")]
+df_hotel_room = df_filter.query("room_type == \"Hotel room\"")
+valor1 = df_hotel_room["price"].mean()
+df_entire_home = df_filter.query("room_type == \"Entire home/apt\"")
+valor2 = df_entire_home["price"].mean()
+df_Private_room = df_filter.query("room_type == \"Private room\"")
+valor3 = df_Private_room["price"].mean()
+df_Shared_room = df_filter.query("room_type == \"Shared room\"")
+valor4 = df_Shared_room["price"].mean()
 
-list_room=[Entire_home_apt, Private_room, Shared_room, Hotel_room]
-d = {"Type_room": ["Entire home/apt", "Private room", "Shared room", "Hotel room"],
-     "Total": [df_barrio_lista.count("Entire home/apt"), df_barrio_lista.count("erivate room"),
-                df_barrio_lista.count("Shared room"), df_barrio_lista.count("Hotel room")]}
+y = [valor1, valor2, valor3, valor4]
+df_barra["Precio promedio"] = y
 
-# Grafico de torta
-df = pd.read_csv("listings.csv")
-st.write(df)
-hospedaje = [list (df ["room_type"]).count("Hotel room"),
-             list(df["room_type"]).count("Private room"),
-             list(df["room_type"]).count("Shared room"),
-             list (df ["room_type"]).count("Entire home/apt")]
-            
-st.write (hospedaje)             
-nombres = ["Hotel room","Private room","Shared room","Entire home/apt"]
-st.write (nombres)
+grafico1 = px.bar(df_barra, "Tipo de hospedaje", "Precio promedio", "Tipo de hospedaje",)
 
-grafico,porciones = plt.subplots()
-porciones.pie(hospedaje,labels=nombres,autopct="%0.1f %%")
-porciones.axis("equal")
-st.pyplot(grafico)
+
+# --- Gráfico de torta  ---
+
+df_torta = pd.DataFrame()
+df_torta["Tipo de hospedaje"] = x
+
+hotel_room_count = list(df_filter["room_type"]).count("Hotel room")
+Entire_home_count = list(df_filter["room_type"]).count("Entire home/apt")
+Private_room_count = list(df_filter["room_type"]).count("Private room")
+Shared_count = list(df_filter["room_type"]).count("Shared room")
+
+valores = [hotel_room_count, Entire_home_count, Private_room_count, Shared_count]
+df_torta["Total"] = valores
+
+grafico2 = px.pie(df_torta, "Tipo de hospedaje", "Total", "Tipo de hospedaje")
+
+
+# Diseño de la pagina
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.write(grafico1)
+with col2:
+    st.write(grafico2)
